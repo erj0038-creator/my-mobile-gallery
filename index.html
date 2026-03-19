@@ -29,24 +29,31 @@
         .thumb-container { aspect-ratio: 1 / 1; overflow: hidden; background: #111; cursor: pointer; }
         .thumb-container img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 
-        /* 하단 바 위치 조정 (위로 약 5mm 정도 올림) */
+        /* 하단 바: 높이를 약 2mm 더 올리고 좌우 여백 추가 */
         .bottom-bar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 20px 40px 20px; /* 아래쪽 여백을 늘려 버튼을 위로 올림 */
+            padding: 20px 30px 60px 30px; /* 좌우 여백 30px로 화살표 위치 조정, 하단 패딩 60px로 버튼 상향 */
             max-width: 500px; margin: 0 auto;
         }
         .bottom-bar button {
             background: transparent; border: none; color: white;
-            font-size: 1.5rem; /* 화살표 크기를 위해 조금 키움 */
             font-weight: bold; cursor: pointer; flex: 1;
             transition: opacity 0.2s;
+            display: flex; align-items: center; justify-content: center;
         }
-        /* HOME 버튼은 글자이므로 폰트 크기 조절 */
+
+        /* 화살표: 사이즈 30% 축소 및 HOME 글자와 정렬 */
+        .nav-prev, .nav-next { 
+            font-size: 1.1rem !important; /* 기존 1.5rem에서 약 30% 축소 */
+        }
+        
+        /* HOME 버튼 글자 사이즈 */
         .btn-home { font-size: 1rem !important; }
         
-        .bottom-bar button:nth-child(1) { text-align: left; }
-        .bottom-bar button:nth-child(2) { text-align: center; }
-        .bottom-bar button:nth-child(3) { text-align: right; }
+        .bottom-bar button:nth-child(1) { justify-content: flex-start; } /* 왼쪽 정렬 */
+        .bottom-bar button:nth-child(2) { justify-content: center; }    /* 가운데 정렬 */
+        .bottom-bar button:nth-child(3) { justify-content: flex-end; }   /* 오른쪽 정렬 */
+        
         .bottom-bar button:disabled { opacity: 0.1; cursor: default; }
 
         #popup {
@@ -58,7 +65,7 @@
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 500px;
             background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-            padding-bottom: env(safe-area-inset-bottom, 40px);
+            padding-bottom: env(safe-area-inset-bottom, 60px);
             z-index: 2100;
         }
 
@@ -98,16 +105,15 @@
     <div id="popup">
         <div class="popup-slider" id="slider"></div>
         <div class="bottom-bar">
-            <button onclick="moveSlider(-1)">&#10094;</button>
+            <button class="nav-prev" onclick="moveSlider(-1)">&#10094;</button>
             <button class="btn-home" onclick="closePopup()">HOME</button>
-            <button onclick="moveSlider(1)">&#10095;</button>
+            <button class="nav-next" onclick="moveSlider(1)">&#10095;</button>
         </div>
     </div>
 
     <script>
         let allImages = []; 
         let currentPage = 1;
-        // 한 페이지당 사진 개수를 100개로 수정
         const itemsPerPage = 100;
 
         fetch('./data.json').then(res => res.json()).then(data => {
