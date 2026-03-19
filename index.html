@@ -34,18 +34,17 @@
             display: flex; justify-content: space-between; align-items: center;
             max-width: 500px; margin: 0 auto;
             width: 100%; box-sizing: border-box;
-            /* 글자가 잘 보이도록 위아래 부드러운 그라데이션 추가 */
             background: linear-gradient(to bottom, 
                 transparent 0%, 
-                rgba(0,0,0,0.6) 50%, 
+                rgba(0,0,0,0.4) 50%, 
                 transparent 100%);
         }
 
         .bottom-bar button {
-            background: transparent; border: none; color: white;
+            background: transparent; border: none; color: #fff;
             font-weight: bold; cursor: pointer; flex: 1;
             display: flex; align-items: center;
-            text-shadow: 0 0 8px rgba(0,0,0,1); /* 글자 그림자 강화 */
+            transition: opacity 0.2s;
         }
         
         .nav-prev, .nav-next { font-size: 1.1rem !important; }
@@ -54,12 +53,17 @@
         .bottom-bar button:nth-child(1) { justify-content: flex-start; }
         .bottom-bar button:nth-child(2) { justify-content: center; }
         .bottom-bar button:nth-child(3) { justify-content: flex-end; }
-        .bottom-bar button:disabled { opacity: 0.15; } /* 비활성화 시에도 살짝 보이게 조정 */
+        .bottom-bar button:disabled { opacity: 0.15; }
 
-        /* 메인 페이지 하단 바 위치 */
+        /* 메인 페이지 하단 바 스타일 */
         #main-page .bottom-bar { 
             padding: 30px 30px 50px 30px; 
             margin-top: 20px;
+        }
+        #main-page .bottom-bar button {
+            /* 너무 두드러지지 않게 적당한 그림자만 유지 */
+            text-shadow: 0 0 5px rgba(0,0,0,1), 0 0 2px rgba(0,0,0,0.8);
+            color: rgba(255, 255, 255, 0.9); /* 살짝 부드러운 흰색 */
         }
 
         /* 팝업 페이지 */
@@ -68,13 +72,20 @@
             background: #000; z-index: 1500; display: none;
         }
 
-        /* 팝업 하단 바 위치 */
         #popup .bottom-bar {
             position: fixed; 
-            bottom: 40px; 
+            bottom: 10px; 
             left: 50%; transform: translateX(-50%);
-            padding: 30px 30px; 
+            background: linear-gradient(to bottom, 
+                transparent 0%, 
+                rgba(0,0,0,0.3) 50%, 
+                transparent 100%);
+            padding: 20px 30px; 
             z-index: 2100;
+        }
+        #popup .bottom-bar button {
+            text-shadow: 0 0 8px rgba(0,0,0,1);
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .popup-slider {
@@ -151,7 +162,6 @@
         function changePage(direction) {
             currentPage += direction;
             renderGallery();
-            window.scrollTo({top:0, behavior:'smooth'});
         }
 
         function openPopup(index, data) {
